@@ -77,7 +77,7 @@ Para ejecutar los ejercicios:
 
 Aquí puedes agregar una captura de pantalla del resultado de la ejecución del programa, mostrando el árbol y los balances después de cada inserción.
 
-![alt text](image-2.png)
+![alt text](image-3.png)
 ---
 
 ## 💻 Créditos
