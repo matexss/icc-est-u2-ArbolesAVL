@@ -1,107 +1,119 @@
-public class AVLTree {
-    private Node node;
 
-    public AVLTree() {              
-        this.node = null;
+
+public class AVLTree{
+    
+    
+    private Node root;
+    
+
+    public AVLTree(){
+        this.root=null;
     }
 
-    public int height(Node root) {
-        if (root == null) {
+    public int height(Node node){
+
+
+        if(node==null){
             return 0;
         }
-        return root.getHeight();
+        return node.getHeight();
     }
 
-    public int getBalance(Node node) {
-        if (node == null) {
+    public int getBalance(Node node){
+        if(node==null){
             return 0;
+
         }
-        return height(node.getLeft()) - height(node.getRight());
+        return height(node.getIzquierda())-height(node.getDerecha());
+        
     }
 
-    private Node insertRec(Node node, int value) {
-        if (node == null) {
-            System.out.println("MATEO MOREJON - SEBASTIAN CERON");
-             System.out.println("Valor a insertar " + value);
-            Node newNode = new Node(value);
+    public void insert(int value){
+        System.out.println("Nodo a insertar:"+ value);
+        root=insertRec(root,value);
+    }
+
+    private Node insertRec(Node node,int value){
+        if(node==null){
+            Node newNode=new Node(value);
             newNode.setHeight(1);
-            System.out.println("Nodo insertado:" + newNode.getValue() + " balance al insertar = " + getBalance(newNode));
+            System.out.println("Nodo insertado: " + value + "  Balance al insertar = " + getBalance(newNode));
             return newNode;
+
         }
 
-        if (value < node.getValue()) {
-            node.setLeft(insertRec(node.getLeft(), value));
-        } else if (value > node.getValue()) {
-            node.setRight(insertRec(node.getRight(), value));
-        } else {
-            return node; 
+        if(value<node.getValue()){
+            node.setIzquierda(insertRec(node.getIzquierda(), value));
+        }else if(value>node.getValue()){
+            node.setDerecha(insertRec(node.getDerecha(), value));
+        }else{
+            return node;
         }
 
-        System.out.println("Nodo actual:" + node.getValue());
+        System.out.println("Node actual:"+ node.getValue());
 
-        // ACTUALIZAR LA ALTURA DE ESTE ANCESTRO NODO
-        int altura = 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+        int altura=1+Math.max(height(node.getIzquierda()),height(node.getDerecha()));
+        
         node.setHeight(altura);
-        System.out.println("Altuta = " + node.getHeight());
+        System.out.println("\tAltura="+ node.getHeight());
 
-        int balance = getBalance(node);
-        System.out.println("Balance = " + balance);
+        int balance=getBalance(node);
+        System.out.println("\tBalance"+getBalance(node));
+        //caso izquierda-izquierda
+        if(balance>1&& value<node.getValue()){
+            System.out.println("Rotacion derecha");
+            return this.rotacionDerecha(node);
 
-        // Rotaciones, solo se imprime el mensaje final correcto
-        if (balance > 1 && value < node.getLeft().getValue()) {
-            System.out.println("ROTACION A LA DERECHA");
-        } else if (balance < -1 && value > node.getRight().getValue()) {
-            System.out.println("ROTACION A LA IZQUIERDA");
-        } else if (balance > 1 && value > node.getLeft().getValue()) {
-            System.out.println("ROTACION IZQUIERDA DERECHA");
-        } else if (balance < -1 && value < node.getRight().getValue()) {
-            System.out.println("ROTACION DERECHA IZQUIERDA");
         }
+
+        //caso derechaDerecha
+
+        if(balance<-1&& value> node.getDerecha().getValue()){
+            System.out.println("Rotacion Derecha Derecha");
+            return this.rotacionIzquierda(node);
+        }  
+
+        //Caso izquierda -derecha
+        if(balance > 1 && value > node.getIzquierda().getValue()){
+            node.setIzquierda(this.rotacionIzquierda(node.getIzquierda()));
+            return this.rotacionDerecha(node);
+    
+        }
+
+        
+
+        //caso derecha-izquierda
+
+        if(balance < -1 && value < node.getDerecha().getValue()){
+            System.out.println("Rotacion derecha-izquierda");
+            node.setDerecha(this.rotacionDerecha(node.getDerecha()));
+            return this.rotacionIzquierda(node);
+        }   
+
 
         return node;
     }
 
-    public void insert(int value) {
-        System.out.println("MATEO MOREJON Y SEBASTIAN CERON");
-        System.out.println("Valor a insertar " + value);
-        node = insertRecWithoutPrint(node, value);
+    public Node rotacionDerecha(Node y) {
+        Node x = y.getIzquierda();
+        Node T2 = x.getDerecha();
+        x.setDerecha(y);
+        y.setIzquierda(T2);
+        y.setHeight(1 + Math.max(this.height(y.getIzquierda()), this.height(y.getDerecha())));
+        x.setHeight(1 + Math.max(this.height(x.getIzquierda()), this.height(x.getDerecha())));
+        return x;
     }
 
-    private Node insertRecWithoutPrint(Node node, int value) {
-        if (node == null) {
-            Node newNode = new Node(value);
-            newNode.setHeight(1);
-            System.out.println("Nodo insertado:" + newNode.getValue() + " balance al insertat = " + getBalance(newNode));
-            return newNode;
-        }
-
-        if (value < node.getValue()) {
-            node.setLeft(insertRecWithoutPrint(node.getLeft(), value));
-        } else if (value > node.getValue()) {
-            node.setRight(insertRecWithoutPrint(node.getRight(), value));
-        } else {
-            return node; 
-        }
-
-        System.out.println("Nodo actual:" + node.getValue());
-
-        int altura = 1 + Math.max(height(node.getLeft()), height(node.getRight()));
-        node.setHeight(altura);
-        System.out.println("Altuta = " + node.getHeight());
-
-        int balance = getBalance(node);
-        System.out.println("Balance = " + balance);
-
-        if (balance > 1 && value < node.getLeft().getValue()) {
-            System.out.println("ROTACION A LA DERECHA");
-        } else if (balance < -1 && value > node.getRight().getValue()) {
-            System.out.println("ROTACION A LA IZQUIERDA");
-        } else if (balance > 1 && value > node.getLeft().getValue()) {
-            System.out.println("ROTACION IZQUIERDA DERECHA");
-        } else if (balance < -1 && value < node.getRight().getValue()) {
-            System.out.println("ROTACION DERECHA IZQUIERDA");
-        }
-
-        return node;
+    public Node rotacionIzquierda(Node x) {
+        Node y = x.getDerecha();
+        Node T2 = y.getIzquierda();
+        y.setIzquierda(x);
+        x.setDerecha(T2);
+        x.setHeight(1 + Math.max(this.height(x.getIzquierda()), this.height(x.getDerecha())));
+        y.setHeight(1 + Math.max(this.height(y.getIzquierda()), this.height(y.getDerecha())));
+        return y;
     }
+
+
+
 }

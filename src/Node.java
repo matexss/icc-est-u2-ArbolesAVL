@@ -1,14 +1,29 @@
-public class Node {
+public class Node{
+    private Node izquierda;
+    private Node derecha;
     private int value;
-    private int height;
-    private Node left;
-    private Node right;
+    private int  height;
 
-    public Node(int value) {
-        this.value = value;
-        this.height = 1; 
-        this.left = null;
-        this.right = null;
+    public Node(int value){
+        this.value=value;
+    }
+
+    
+
+    public Node getIzquierda() {
+        return izquierda;
+    }
+
+    public void setIzquierda(Node izquierda) {
+        this.izquierda = izquierda;
+    }
+
+    public Node getDerecha() {
+        return derecha;
+    }
+
+    public void setDerecha(Node derecha) {
+        this.derecha = derecha;
     }
 
     public int getValue() {
@@ -19,32 +34,23 @@ public class Node {
         this.value = value;
     }
 
+
+
     public int getHeight() {
         return height;
     }
+
+
 
     public void setHeight(int height) {
         this.height = height;
     }
 
-    public Node getLeft() {
-        return left;
-    }
 
-    public void setLeft(Node left) {
-        this.left = left;
-    }
 
-    public Node getRight() {
-        return right;
-    }
+    
 
-    public void setRight(Node right) {
-        this.right = right;
-    }
-
-    @Override
-    public String toString() {
-        return "Node [value=" + value + ", height=" + height + "]";
-    }
+    
+    
+    
 }
